@@ -57,9 +57,14 @@ iptbl -P OUTPUT ACCEPT
 #
 # Forward all connections from external interface (eth0) to 
 # ControlCenter at 192.168.100.10
-#
-ip4tbl -t nat -I PREROUTING -i eth0 -j DNAT --to-d 192.168.110.10
-ip4tbl -t nat -I POSTROUTING -o eth0 -j SNAT --to-s 192.168.0.2
+# DNAT
+ip4tbl -t nat -I PREROUTING -i eth0 -p tcp -j DNAT --to-d 192.168.110.10
+ip4tbl -t nat -I PREROUTING -i eth0 -p udp -j DNAT --to-d 192.168.110.10
+
+# SNAT
+#ip4tbl -t nat -I POSTROUTING -o eth0 -j SNAT --to-s 192.168.0.2
+ip4tbl -t nat -I POSTROUTING  -o eth0 -j MASQUERADE
+
 
 #
 # Display INPUT chain if verbose
