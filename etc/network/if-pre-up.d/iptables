@@ -1,0 +1,70 @@
+#!/bin/sh
+#
+# IPTables firewall script. .
+#
+
+
+#
+# Ensure sane path
+#
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+#
+# When running from the command line, provide a -v option to print the
+# installed rules at the end.
+#
+verbose=
+if [ "$1" = "-v" ]; then
+    shift
+    verbose=on
+fi
+
+#
+# Rather than duplicate entries for iptables and ip6tables, have some small
+# wrapper functions do it for us.
+#
+# ip4tbl - apply ruleset for just iptables
+# ip6tbl - apply ruleset for just ip6tables
+# iptbl  - apply ruleset for both iptables and ip6tables
+#
+ip4tbl()
+{
+    iptables "$@"
+}
+ip6tbl()
+{
+    ip6tables "$@"
+}
+iptbl()
+{
+    ip4tbl "$@"
+    ip6tbl "$@"
+}
+
+#
+# Flush all rulesets
+#
+iptbl -F
+iptbl -X
+
+#
+# Allow by default
+#
+iptbl -P INPUT ACCEPT
+iptbl -P FORWARD ACCEPT
+iptbl -P OUTPUT ACCEPT
+
+#
+# Forward all connections from external interface (eth0) to 
+# ControlCenter at 192.168.100.10
+#
+ip4tbl -t nat -I PREROUTING -i eth0 -j DNAT --to-d 192.168.110.10
+ip4tbl -t nat -I POSTROUTING -o eth0 -j SNAT --to-s 192.168.0.2
+
+#
+# Display INPUT chain if verbose
+#
+if [ -n "${verbose}" ]; then
+    iptables  -L INPUT -vn --line-numbers
+    ip6tables -L INPUT -vn --line-numbers
+fi
