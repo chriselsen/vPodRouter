@@ -37,7 +37,6 @@ iface eth1 inet6 static
 	up /sbin/ip addr add 192.168.210.2/24 dev eth1
 	up /sbin/ip addr add 192.168.220.2/24 dev eth1
 	up /sbin/ip addr add 192.168.230.2/24 dev eth1
-	up /sbin/ip addr add 192.168.100.1/24 dev eth1
 	up /sbin/ip addr add 192.168.110.1/24 dev eth1
 	up /sbin/ip addr add 192.168.120.1/24 dev eth1
 	up /sbin/ip addr add 192.168.130.1/24 dev eth1
