@@ -1,12 +1,14 @@
 #!/bin/sh
-# Script to initialize the internal and external network via ping and arping. 
+# Script to initialize the internal and external network via ping and arping.
 # Necessary to overcome bugs in older vCloud Director versions.
 
 # External interface
-ping -c 3 -I eth0 198.41.0.4
-arping -c 2 -A -I eth0 192.168.0.2
+if [ "$IFACE" = eth0 ]; then
+        ping -c 3 -I eth0 198.41.0.4
+fi
 
-# Internal intefaces
-arping -c 2 -A -I eth1 192.168.100.1
-arping -c 2 -A -I eth1 192.168.100.2
 
+# Internal interface
+if [ "$IFACE" = eth0 ]; then
+        ping -c 3 -I eth0 192.168.110.10
+fi
