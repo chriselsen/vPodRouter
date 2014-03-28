@@ -1,0 +1,2 @@
+#!/bin/sh
+setterm -blank 0 -powersave off -powerdown 0
