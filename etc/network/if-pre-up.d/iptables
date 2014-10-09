@@ -50,8 +50,8 @@ iptbl -X
 #
 # Allow by default
 #
-iptbl -P PREROUTING ACCEPT
-iptbl -P POSTROUTING ACCEPT
+ip4tbl -t nat -P PREROUTING ACCEPT
+ip4tbl -t nat -P POSTROUTING ACCEPT
 iptbl -P INPUT ACCEPT
 iptbl -P FORWARD ACCEPT
 iptbl -P OUTPUT ACCEPT
